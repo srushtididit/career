@@ -1,72 +1,75 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const Profile = () => {
-    const [userData, setUserData] = useState({
-        name: '',
-        academicRecords: [],
-        skills: [],
-        interests: []
-    });
+  const [userData, setUserData] = useState({
+    name: "",
+    academicRecords: [],
+    skills: [],
+    interests: [],
+  });
 
-    useEffect(() => {
-        // Fetch user data when component mounts
-        const fetchData = async () => {
-            try {
-                const response = await axios.get('http://localhost:5000/api/users/profile', {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}` // Assuming you store token in localStorage
-                    }
-                });
-                setUserData(response.data);
-            } catch (error) {
-                console.error('Error fetching profile:', error);
-            }
-        };
-        
-        fetchData();
-    }, []);
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setUserData((prevData) => ({ ...prevData, [name]: value }));
+  useEffect(() => {
+    // Fetch user data when component mounts
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/users/profile",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`, // Assuming you store token in localStorage
+            },
+          }
+        );
+        setUserData(response.data);
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      }
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        
-        try {
-            await axios.put('http://localhost:5000/api/users/profile', userData, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-            alert('Profile updated successfully!');
-        } catch (error) {
-            console.error(error);
-        }
-    };
+    fetchData();
+  }, []);
 
-    return (
-      <form onSubmit={handleSubmit}>
-          <h2>Edit Profile</h2>
-          <label>Name:</label>
-          <input type="text" name="name" value={userData.name} onChange={handleChange} required />
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUserData((prevData) => ({ ...prevData, [name]: value }));
+  };
 
-          {/* Add fields for academic records */}
-          <h3>Academic Records</h3>
-          {/* You can add input fields for academic records here */}
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-          {/* Add fields for skills */}
-          <h3>Skills</h3>
-          {/* You can add input fields for skills here */}
+    try {
+      await axios.put("http://localhost:5000/api/users/profile", userData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      alert("Profile updated successfully!");
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-          {/* Add fields for interests */}
-          <h3>Interests</h3>
-          {/* You can add input fields for interests here */}
+  return (
+    <form onSubmit={handleSubmit}>
+      <h2>Edit Profile</h2>
+      <label>Name:</label>
+      <input
+        type="text"
+        name="name"
+        value={userData.name}
+        onChange={handleChange}
+        required
+      />
 
-          <button type="submit">Update Profile</button>
-      </form>
+      <h3>Academic Records</h3>
+
+      <h3>Skills</h3>
+
+      <h3>Interests</h3>
+
+      <button type="submit">Update Profile</button>
+    </form>
   );
 };
 
